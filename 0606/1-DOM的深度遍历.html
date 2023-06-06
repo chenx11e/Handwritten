@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="body">
+    <div>
+      <ul>
+        <li>1</li>
+        <li>2</li>
+        <li>3</li>
+      </ul>
+      <p>这是一个p</p>
+      <!-- 注释 -->
+    </div>
+    <span>这是一个span<strong>加强版</strong></span>
+  </div>
+
+  <script>
+    let body = document.querySelector('.body')
+    // 判断node的类型
+    function visitNode (node) {
+      // console.log(node);//<body class="body"> (...)</body>
+      if (node instanceof Comment) {
+        console.log(node.textContent + '------注释-------');
+      }
+      if (node instanceof Text) {
+        // 文本中可能还含有空格
+        if (node.textContent.trim()) {
+          console.log(node.textContent + '------文本-------');
+        }
+      }
+      if (node instanceof HTMLElement) {
+        console.log(node.tagName.toLowerCase() + '------HTML-------');
+      }
+
+    }
+    // 深度遍历
+    function depthFirstTraverse (node) {
+      visitNode(node);
+      const childNodes = node.childNodes
+      if (childNodes.length > 0) {
+        childNodes.forEach(item => {
+          depthFirstTraverse(item)
+        })
+      }
+    }
+    depthFirstTraverse(body)
+
+  </script>
+</body>
+
+</html>

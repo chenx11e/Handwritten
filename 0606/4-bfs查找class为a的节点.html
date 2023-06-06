@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="body a">
+    <div>
+      <ul>
+        <li class="a">1</li>
+        <li>2</li>
+        <li>3</li>
+      </ul>
+      <p class="a">这是一个p</p>
+      <!-- 注释 -->
+    </div>
+    <span class="a">这是一个span<strong class="a">加强版</strong></span>
+  </div>
+  <script>
+    let body = document.querySelector('.body')
+
+    // 广度遍历
+    function breadFirstTraverse (node) {
+      const queue = [node];
+      // console.log(queue);
+      const res = []
+      while (queue.length) {
+        // console.log(queue);
+        let node = queue.shift()
+        if (node.classList && node.classList.contains('a')) {
+          res.push(node)
+        }
+        const childNodes = node.childNodes
+        childNodes.forEach(item => {
+          queue.push(item)
+        })
+
+      }
+      return res
+
+    }
+    console.log(breadFirstTraverse(body));
+
+  </script>
+</body>
+
+</html>
