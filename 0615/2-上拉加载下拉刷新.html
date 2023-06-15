@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>触底加载和下拉刷新</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    #content {
+      min-height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+      position: relative;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="content">
+    <div id="list"> <!-- 列表内容 --> </div>
+  </div>
+  <script>
+    let isLoading = false
+    let isRefreshing = false
+    const list = document.getElementById('list')
+    const content = document.getElementById('content')
+    // 定义了一个 loadData 函数，用于加载更多的数据。
+    function loadData () {
+      console.log('loadData')
+      if (isLoading) return
+      isLoading = true
+      setTimeout(() => {
+        for (let i = 0; i < 30; i++) {
+          const item = document.createElement('div')
+          item.innerText = `列表项 ${list.childElementCount + 1}`
+          list.appendChild(item)
+        }
+        isLoading = false
+      }, 1000)
+    }
+    // 定义了一个 refreshData 函数，用于下拉刷新数据。
+    function refreshData () {
+      console.log('refreshData')
+      if (isRefreshing) return
+      isRefreshing = true
+      setTimeout(() => {
+        list.innerHTML = ''
+        loadData()
+        isRefreshing = false
+      }, 1000)
+    }
+    // 给窗口添加了 scroll 事件监听器，当页面滚动到底部时触发 loadData 函数，加载更多的数据
+    window.addEventListener('scroll', () => {
+      const scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+      const scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
+      const clientHeight = document.documentElement.clientHeight || document.body.clientHeight
+      if (scrollTop + clientHeight >= scrollHeight) {
+        loadData()
+      }
+    })
+    // 给页面顶部的内容容器 content 添加了 touchstart 事件监听器，记录下当前触摸的位置。
+    // 在触摸移动时，如果滑动到页面的顶部，且滚动条的位置为0，
+    // 就认为用户进行了下拉刷新，此时触发 refreshData 函数，刷新数据。
+    content.addEventListener('touchstart', (e) => {
+      // 获取触摸的起始位置 startY，即触摸事件的第一根手指距离 content 区域上边缘的距离。
+      const startY = e.touches[0].clientY
+      // 继续使用事件监听器 addEventListener 监听 content 上的 touchmove 事件。当用户继续向下拖动手指时，会触发该事件。
+      content.addEventListener('touchmove', (e) => {
+        // 获取当前触摸的位置 currentY，即触摸事件的第一根手指当前距离 content 区域上边缘的距离。
+        const currentY = e.touches[0].clientY
+        // 判断手指的下拉方向，即当前位置是否大于起始位置 startY，同时判断滚动条是否滚动到页面顶部
+        if (currentY > startY && document.documentElement.scrollTop === 0) {
+          // 如果符合上述两个条件，就调用 refreshData() 函数，重新加载最新的数据，即触发下拉刷新的功能。
+          refreshData()
+        }
+      })
+    }
+    )
+    loadData();    
+  </script>
+</body>
+
+</html>
