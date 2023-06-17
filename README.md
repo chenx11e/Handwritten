@@ -82,3 +82,13 @@ instanceof 是 JavaScript 中的运算符，用来判断一个对象是否是某
 4. 使用 map.set 函数，将 obj 与其拷贝对象 map 映射起来，存储到 map 中。
 5. 对于对象属性，我们需要递归调用 deepClone 函数，获取其拷贝对象，并赋值给拷贝对象 map 中的对应属性。对于非对象属性，则直接复制即可。
 6. 最后返回拷贝对象 res
+
+## 6-16
+
+### 1.手写 发布订阅
+
+Event 类：
+
+- `on(eventName, fn)`：订阅事件，将事件名 eventName 和回调函数 fn 存储到 events 对象中，如果 eventName 对应的事件不存在，则初始化一个空数组。
+- `emit(eventName, ...args)`：触发事件，获取 eventName 对应的所有回调函数 fns，并依次执行它们。
+- `off(eventName, fn)`：移除事件，将 events 对象中 eventName 的回调函数数组中指定的回调函数 fn 移除，如果回调函数参数 fn 不传，则移除全部。
